@@ -20,8 +20,8 @@ public class ProjectApplicationTest {
 	
 	@Test
 	public void exampleProjectTest() {
-		empService.registerEmployee(emp);
-		emp.setSalary(212.20);
+//		empService.registerOrUpdateEmployee(emp);
+//		emp.setSalary(212.20);
 		System.out.println("project test case scenario");
 	}
 }
