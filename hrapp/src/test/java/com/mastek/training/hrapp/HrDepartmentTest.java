@@ -43,14 +43,13 @@ public class HrDepartmentTest {
 		assertNotNull(depServ.findById(deptno));
 	}
 	
-	
+	@Ignore
 	@Test
 	public void deleteUsingServ() {
-		int deptno = 11;
+		int deptno = 24;
 		depServ.deleteByDeptno(deptno);
 		assertNull(depServ.findById(deptno));
 	}
-	
 	@Test
 	public void fetchByLocation() {
 		List<Department> depts = depServ.fetchDeptsByLocation("UK");

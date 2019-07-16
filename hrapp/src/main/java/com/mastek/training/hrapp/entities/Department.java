@@ -1,14 +1,19 @@
 package com.mastek.training.hrapp.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +34,26 @@ public class Department implements Serializable{
 	@Value("default")
 	private String location;
 	
+	// OneToMany: one dept has many employees
+	private Set<Employee> members = new HashSet<>();
+	
 	public Department() {
 		System.out.println("department created");
+	}
+	
+	//@OneToMany: used ont eh get method of set to configure associations
+	// fetch=	LAZY: delay initialization until method getMetmbers() is called using additional select query [default]
+	//			EAGER: initialize the collection on entity find post load event
+	// cascade=	ALL: all entity operations done on department would be performed on each associated employee object
+	//			PERSIST/MERGE/DELETE/REFRESH
+	// mappedBy= identifies property names in child class where the JoinColumn [Foreign Key] configuration is present
+	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL, mappedBy="currentDepartment")
+	public Set<Employee> getMembers() {
+		return members;
+	}
+
+	public void setMembers(Set<Employee> members) {
+		this.members = members;
 	}
 
 	@Override

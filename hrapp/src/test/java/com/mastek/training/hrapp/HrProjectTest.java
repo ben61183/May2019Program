@@ -43,10 +43,10 @@ public class HrProjectTest {
 		assertNotNull(projServ.findById(projno));
 	}
 	
-	
+	@Ignore
 	@Test
 	public void deleteUsingServ() {
-		int projno = 14;
+		int projno = 23;
 		projServ.deleteByprojno(projno);
 		assertNull(projServ.findById(projno));
 	}

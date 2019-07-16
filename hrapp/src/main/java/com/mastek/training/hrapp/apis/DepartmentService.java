@@ -21,7 +21,7 @@ public class DepartmentService {
 	
 	public Department registerOrUpdateDept(Department dep) {
 		dep = depRep.save(dep);
-		System.out.println("dep registered"+dep);
+		System.out.println("department registered"+dep);
 		return dep;
 	}
 	

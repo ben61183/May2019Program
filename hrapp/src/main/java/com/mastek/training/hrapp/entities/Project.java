@@ -1,12 +1,15 @@
 package com.mastek.training.hrapp.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -29,6 +32,19 @@ public class Project implements Serializable{
 	@Value("default")
 	private String customerName;
 	
+	// ManyToMany: mapping many projects to many employees
+	private Set<Employee> team = new HashSet<>();
+	
+	// mappedBy: check the configuration for many to many association in employee class getAssignments() method
+	@ManyToMany(mappedBy = "assignments")
+	public Set<Employee> getTeam() {
+		return team;
+	}
+
+	public void setTeam(Set<Employee> team) {
+		this.team = team;
+	}
+
 	public Project() {
 		System.out.println("project created");
 	}

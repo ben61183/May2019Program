@@ -1,13 +1,21 @@
 package com.mastek.training.hrapp.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -32,6 +40,42 @@ public class Employee implements Serializable{ // manage serialization of object
 	private String name;
 	@Value("1.0")
 	private double salary;
+	
+	// ManyToMany: mapping many projects to many employees
+	private Set<Project> assignments = new HashSet<>();
+	
+	// @ManyToMany: configuring association for both the entities
+	// @JoinTable: provides all the configuration fo the third table
+	// name: name of the join table
+	// joinColumns: foreign key column name fir current class
+	// inverseJoinColumns: foreign key column for other class
+	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinTable(name = "JPA_ASSIGNMENTS", 
+		joinColumns = @JoinColumn(name = "FK_EMPNO"),
+		inverseJoinColumns = @JoinColumn(name = "FK_PROJECTID"))
+	public Set<Project> getAssignments() {
+		return assignments;
+	}
+
+	public void setAssignments(Set<Project> assignments) {
+		this.assignments = assignments;
+	}
+	
+	// ManyToOne: mapping each employee to one department
+	private Department currentDepartment;
+	
+	// @ManyToOne: associating the many class to one object
+	// @JoinColumn: configure the foreign key column for the association between two entites
+	@ManyToOne
+	@JoinColumn(name="FK_DepartmentId")
+	public Department getCurrentDepartment() {
+		return currentDepartment;
+	}
+
+	public void setCurrentDepartment(Department currentDepartment) {
+		this.currentDepartment = currentDepartment;
+	}
+
 	// default constructor
 	public Employee() {
 		System.out.println("employee created");
@@ -64,5 +108,4 @@ public class Employee implements Serializable{ // manage serialization of object
 	public void setSalary(double salary) {
 		this.salary = salary;
 	}
-	
 }
