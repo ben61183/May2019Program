@@ -1,21 +1,27 @@
 package com.formulaone.formulaone.entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.ws.rs.FormParam;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
+
 @Scope("prototype")
 @Entity
 @Table(name="FON_RACE")
@@ -25,18 +31,31 @@ public class Race implements Serializable{
 	@Value("0")
 	private int raceID;
 	@Value("default")
+	@FormParam("circuit")
 	private String circuit;
 	@Value("default")
+	@FormParam("country")
 	private String country;
 	@Value("0")
+	@FormParam("length")
 	private int length;
 	
 	// many races to many teams
+	private Set<Driver> circuitRacers = new HashSet<>();
 	
-	Race(){
-		System.out.println("new race initialized");
+	@ManyToMany(mappedBy = "attendedRaces")
+	@XmlTransient
+	public Set<Driver> getCircuitRacers() {
+		return circuitRacers;
 	}
 
+	public void setCircuitRacers(Set<Driver> circuitRacers) {
+		this.circuitRacers = circuitRacers;
+	}
+
+	public Race(){
+		System.out.println("new race initialized");
+	}
 
 	@Id
 	@Column(name="raceid")

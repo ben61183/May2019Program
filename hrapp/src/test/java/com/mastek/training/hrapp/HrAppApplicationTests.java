@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -31,8 +32,8 @@ public class HrAppApplicationTests {
 	// scan in memory all components and provide the best match object in the component
 	@Autowired
 	EmployeeService empService;
-	@Autowired
-	Employee emp;
+	
+//	Employee emp;
 	
 	@Autowired
 	DepartmentService depService;
@@ -42,7 +43,8 @@ public class HrAppApplicationTests {
 	
 	@Test
 	public void addEmployeeUsingService() {
-		emp.setEmpno(5);
+		Employee emp = new Employee();
+//		emp.setEmpno(5);
 		emp.setName("Roger");
 		emp.setSalary(112.1);
 		empService.registerOrUpdateEmployee(emp);
@@ -71,6 +73,22 @@ public class HrAppApplicationTests {
 			System.out.println(e);
 		}
 		assertTrue(emps.size()>=3);
+	}
+	
+	@Test
+	public void assignDeptToEmp() {
+		int empno = 385;
+		int deptno = 51;
+		Employee emp = empService.assignDepartment(empno,deptno);
+		assertNotNull(emp.getCurrentDepartment());
+	}
+	
+	@Test
+	public void assignProjectToEmp() {
+		int empno = 385;
+		int projno = 356;
+		Set<Project> projects = empService.assignProject(empno,projno);
+		assertNotNull(projects);
 	}
 	
 	@Test

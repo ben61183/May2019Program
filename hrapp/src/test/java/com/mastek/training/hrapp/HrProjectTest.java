@@ -24,11 +24,11 @@ public class HrProjectTest {
 	@Autowired
 	ProjectService projServ;
 	
-	@Autowired
-	Project proj;
+	
 	
 	@Test
 	public void addNewprojUsingServ() {
+		Project proj = new Project();
 		proj.setProjectID(0);
 		proj.setName("graduate project");
 		proj.setCustomerName("morrisons");

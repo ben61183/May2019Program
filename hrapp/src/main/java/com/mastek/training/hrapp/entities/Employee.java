@@ -19,12 +19,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.ws.rs.FormParam;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component // disable for form parameter processing
+
 @Scope("prototype") // prototype - one copy for each test case
 @Entity // declares the class as an entity
 @Table(name="JPA_EMPLOYEE") // declare table name for the class
@@ -34,11 +38,15 @@ import org.springframework.stereotype.Component;
 			query="select e from Employee e where e.salary between :min and :max") // query = "object_query"
 })
 public class Employee implements Serializable{ // manage serialization of objects
+	
 	@Value("-1")
+	@FormParam("empno")
 	private int empno;
 	@Value("default")
+	@FormParam("name") // name of parameters passed via html form
 	private String name;
 	@Value("1.0")
+	@FormParam("salary")
 	private double salary;
 	
 	// ManyToMany: mapping many projects to many employees
@@ -49,14 +57,15 @@ public class Employee implements Serializable{ // manage serialization of object
 	// name: name of the join table
 	// joinColumns: foreign key column name fir current class
 	// inverseJoinColumns: foreign key column for other class
-	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@ManyToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY) // has cascade -> primary class
 	@JoinTable(name = "JPA_ASSIGNMENTS", 
 		joinColumns = @JoinColumn(name = "FK_EMPNO"),
 		inverseJoinColumns = @JoinColumn(name = "FK_PROJECTID"))
+//	@XmlTransient // ignore the collections while using API
 	public Set<Project> getAssignments() {
 		return assignments;
 	}
-
+	
 	public void setAssignments(Set<Project> assignments) {
 		this.assignments = assignments;
 	}

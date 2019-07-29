@@ -28,19 +28,14 @@ public class FormulaoneApplicationTests {
 	TeamService teaSer;
 	@Autowired
 	RaceService racSer;
-	@Autowired
-	Driver d;
-	@Autowired
-	Team t;
-	@Autowired
-	Race r;
 	
 	@Ignore
 	@Test
 	public void addDriver() {
-		d.setDriverName("Vettel");
-		d.setPoints(43);
-		d.setSeasonWins(1);
+		Driver d = new Driver();
+		d.setDriverName("Grojan");
+		d.setPoints(27);
+		d.setSeasonWins(0);
 		driSer.addOrUpdateDriver(d);
 		assertNotNull(driSer);
 	}
@@ -48,10 +43,11 @@ public class FormulaoneApplicationTests {
 	@Ignore
 	@Test
 	public void addTeam() {
-		t.setEngine("Ferrari");
+		Team t = new Team();
+		t.setEngine("Honda");
 		t.setNumDrivers(2);
-		t.setNumStaff(29);
-		t.setTeamName("Ferrari");
+		t.setNumStaff(21);
+		t.setTeamName("Renault");
 		teaSer.addOrUpdateTeam(t);
 		assertNotNull(teaSer);
 	}
@@ -59,10 +55,11 @@ public class FormulaoneApplicationTests {
 	@Ignore
 	@Test
 	public void addCircuit() {
-		r.setCircuit("Nurburgring");
-		r.setCountry("Germany");
-		r.setLength(19);
-		racSer.addOrUpdateDriver(r);
+		Race r = new Race();
+		r.setCircuit("Abu Dhabi");
+		r.setCountry("UAE");
+		r.setLength(15);
+		racSer.addOrUpdateRace(r);
 		assertNotNull(racSer);
 	}
 	
@@ -87,27 +84,29 @@ public class FormulaoneApplicationTests {
 	@Ignore
 	@Test
 	public void deleteDriverService() {
-		int id = 86;
+		int id = 98;
 		driSer.deleteDriver(id);
 	}
 	
 	@Ignore
 	@Test
 	public void deleteTeamService() {
-		int id = 85;
+		int id = 97;
 		teaSer.deleteTeam(id);
 	}
 	
 	@Ignore
 	@Test
 	public void deleteRaceService() {
-		int id = 84;
+		int id = 96;
 		racSer.deleteRace(id);
 	}
 	
 	@Test
 	public void fetchDriverByWins() {
-		List<Driver> drivs = driSer.fetchByWins(2, 4);
+		int min = 2;
+		int max = 4;
+		List<Driver> drivs = driSer.fetchByWins(min, max);
 		for(Driver driv:drivs) {
 			System.out.println(driv);
 		}
@@ -126,6 +125,74 @@ public class FormulaoneApplicationTests {
 		List<Race> racs = racSer.fetchByCountry("Monacco");
 		for(Race rac:racs) {
 			System.out.println(rac);
+		}
+	}
+	
+	@Test
+	public void attemptTwo() {
+		Driver d1 = new Driver();
+		d1.setDriverName("ATEST D1");
+		d1.setSeasonWins(1);
+		d1.setPoints(44);
+		
+		Driver d2 = new Driver();
+		d2.setDriverName("ATEST D2");
+		d2.setSeasonWins(0);
+		d2.setPoints(27);
+		
+		Driver d3 = new Driver();
+		d3.setDriverName("ATEST D3");
+		d3.setPoints(41);
+		d3.setSeasonWins(1);
+		
+		Team t1 = new Team();
+		t1.setEngine("ATEST T1");
+		t1.setNumDrivers(2);
+		t1.setNumStaff(19);
+		t1.setTeamName("ATEST T1");
+		
+		Team t2 = new Team();
+		t2.setEngine("ATEST T2");
+		t2.setNumDrivers(2);
+		t2.setNumStaff(19);
+		t2.setTeamName("ATEST T2");
+		
+		Race r1 = new Race();
+		r1.setCircuit("ATEST R1");
+		r1.setCountry("China");
+		r1.setLength(9);
+		
+		Race r2 = new Race();
+		r2.setCircuit("ATEST R2");
+		r2.setCountry("Bahrain");
+		r2.setLength(6);
+		
+		// members to a team
+		t1.getTeamMembers().add(d1); 
+		t1.getTeamMembers().add(d2); 
+		t2.getTeamMembers().add(d3); 
+		d1.setCurrentTeam(t1);		
+		d2.setCurrentTeam(t1);		
+		d3.setCurrentTeam(t2);
+		
+		// drivers to races and races to drivers
+		d1.getAttendedRaces().add(r1);
+		d1.getAttendedRaces().add(r2);
+		
+//		d2.getAttendedRaces().add(r2);
+		
+		try {
+		teaSer.addOrUpdateTeam(t1);
+		teaSer.addOrUpdateTeam(t2);
+		
+		driSer.addOrUpdateDriver(d1);
+		driSer.addOrUpdateDriver(d2);
+		driSer.addOrUpdateDriver(d3);
+		
+		racSer.addOrUpdateRace(r1);
+		racSer.addOrUpdateRace(r2);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

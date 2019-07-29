@@ -24,11 +24,11 @@ public class HrDepartmentTest {
 	@Autowired
 	DepartmentService depServ;
 	
-	@Autowired
-	Department dep;
+	
 	
 	@Test
 	public void addNewDeptUsingServ() {
+		Department dep = new Department();
 		dep.setDeptno(0);
 		dep.setLocation("china");
 		dep.setName("china hr");
@@ -50,6 +50,7 @@ public class HrDepartmentTest {
 		depServ.deleteByDeptno(deptno);
 		assertNull(depServ.findById(deptno));
 	}
+	
 	@Test
 	public void fetchByLocation() {
 		List<Department> depts = depServ.fetchDeptsByLocation("UK");

@@ -15,12 +15,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.ws.rs.FormParam;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Component
 @Scope("prototype")
 @Entity
 @Table(name="JPA_DEPARTMENT")
@@ -30,8 +32,10 @@ public class Department implements Serializable{
 	@Value("-1")
 	private int deptno;
 	@Value("default")
+	@FormParam("name")
 	private String name;
 	@Value("default")
+	@FormParam("location")
 	private String location;
 	
 	// OneToMany: one dept has many employees
@@ -48,6 +52,7 @@ public class Department implements Serializable{
 	//			PERSIST/MERGE/DELETE/REFRESH
 	// mappedBy= identifies property names in child class where the JoinColumn [Foreign Key] configuration is present
 	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL, mappedBy="currentDepartment")
+	@XmlTransient // ignore the collections while using API
 	public Set<Employee> getMembers() {
 		return members;
 	}
